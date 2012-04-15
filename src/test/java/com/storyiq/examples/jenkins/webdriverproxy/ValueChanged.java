@@ -1,10 +1,9 @@
 package com.storyiq.examples.jenkins.webdriverproxy;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
-
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
 public class ValueChanged implements ExpectedCondition<Boolean> {
@@ -19,7 +18,11 @@ public class ValueChanged implements ExpectedCondition<Boolean> {
 
 	public Boolean apply(WebDriver d) {
 		WebElement codeMirror = d.findElement(selector);
-        return codeMirror.getText().equals(value);
+        try {
+            return codeMirror.getText().equals(value);
+        } catch (StaleElementReferenceException e) {
+            return false;
+        }
     }
 
 }
